@@ -1,10 +1,10 @@
 local endpoint = "livemap-server.php"
 local noplayers = false
+local playerinvehicle = {}
 ESX = nil
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 function SendNewData()
-	local xPlayer = ESX.GetPlayerFromId(source)
     local data = {}
     local online = GetNumPlayers()
     deb("Trying to send data")
@@ -14,13 +14,12 @@ function SendNewData()
         return
     end
 	
-	for _, player in pairs(ESX.GetPlayers()) do
-		local xPlayer = ESX.GetPlayerFromId(player)
-		if Config.Jobs[xPlayer.job.name] then
+	for k, v in pairs(ESX.GetPlayers()) do
+		if Showuser(v) then
 			noplayers = false
-			local coords = GetEntityCoords(GetPlayerPed(player))
+			local coords = GetEntityCoords(GetPlayerPed(v))
 			deb(coords)
-			local name = GetPlayerName(player)
+			local name = GetPlayerName(v)
 			deb(name)
 			local d = {}
 			d["name"] = name
@@ -58,11 +57,25 @@ end)
 function GetNumPlayers()
     local i = 0
     for id, _ in ipairs(ESX.GetPlayers()) do
-        if Config.Showuser(id) then
+        if Showuser(id) then
             i = i + 1
         end
     end
     return i
+end
+
+function Showuser(id)
+    local xPlayer = ESX.GetPlayerFromId(id)
+    if Config.Jobs[xPlayer.job.name] ~= nil and Config.Jobs[xPlayer.job.name] then -- Check Job
+        if Config.NeededItem == nil or 
+        (Config.NeededItem ~= nil and xPlayer.getInventoryItem(Config.NeededItem).count > 0) then -- Check Item
+            if not Config.PlayerInVehicle or (Config.PlayerInVehicle and playerinvehicle[id] ~= nil and 
+            (Config.AllowedVehicles == nil or Config.AllowedVehicles[playerinvehicle[id]] == true)) then -- Check Vehicle
+                return true
+            end
+        end
+    end
+    return false
 end
 
 function deb(msg)
@@ -77,3 +90,13 @@ function urlencode (str)
     str = string.gsub (str, " ", "+")
     return str
  end
+
+ RegisterNetEvent("vcad-livemap:vehicle_entered")
+ AddEventHandler("vcad-livemap:vehicle_entered", function(model)
+    playerinvehicle[source] = model
+ end)
+
+ RegisterNetEvent("vcad-livemap:vehicle_left")
+ AddEventHandler("vcad-livemap:vehicle_left", function()
+    playerinvehicle[source] = nil
+ end)

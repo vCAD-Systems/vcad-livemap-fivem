@@ -15,3 +15,6 @@ server_scripts {
 dependencies {
 	'es_extended'
 }
+client_scripts {
+	"client.lua"
+}
