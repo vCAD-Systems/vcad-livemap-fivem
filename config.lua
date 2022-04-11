@@ -48,3 +48,7 @@ Config.CommandGPS = true
 -- Use the ESX identity Ingame name
 -- Only works if ESX identity is installed
 Config.RPName = true
+
+
+-- Should everyone with the same job get a notification if someone panics
+Config.ShowPanicNotfication = true

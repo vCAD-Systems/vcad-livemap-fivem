@@ -180,6 +180,16 @@ end)
 RegisterNetEvent("vcad-livemap:panic")
 AddEventHandler("vcad-livemap:panic", function(state)
     panic(source, state)
+
+    if state and Config.ShowPanicNotfication then
+        for id, _ in ipairs(ESX.GetPlayers()) do
+            if id ~= source then
+                local xPlayer = ESX.GetPlayerFromId(id)
+                xPlayer.showNotification("~r~Ein Panicbutten wurde gedrückt", false, true, 90)
+            end
+        end
+    end
+
 end)
 
 
