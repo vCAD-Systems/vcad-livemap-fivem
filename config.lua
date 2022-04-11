@@ -1,15 +1,30 @@
 Config = {}
 Config.Enable = true
 Config.DebugMode = true
-Config.PrivateKey = "EcWo5PO3VZnH2mB"
+Config.PrivateKey = "yT8kmhcdfOMrF3e"
 
 -- Update Rate in secs
 Config.UpdateRate = 1
 
+-- If you need a specific job to be shown
+Config.JobNeeded = true
 
+
+--[[
+Allowed jobs and the assigned blipcolor
+["job"] = color
+
+1 = white
+2 = blue
+3 = green
+4 = red
+5 = yellow
+]]
 Config.Jobs = {
-    ['police'] = true,
-    ['fib'] = true
+    ['police'] = 2,
+    ['fib'] = 1,
+    ['ambulance'] = 4,
+    ['mechanic'] = 5
 }
 
 -- If item is needed in Inventory

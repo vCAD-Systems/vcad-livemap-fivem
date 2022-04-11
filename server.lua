@@ -22,8 +22,8 @@ function SendNewData()
 	for k, v in pairs(ESX.GetPlayers()) do
 		if Showuser(v) then
 			noplayers = false
-			local coords = GetEntityCoords(GetPlayerPed(v)) -- Needs Onesync enabled to work
-			deb(coords)
+			local coords = ESX.GetPlayerFromId(v).coords
+            deb(coords)
 			local name = GetDisplayName(v)
 			deb(name)
 			local d = {}
@@ -79,7 +79,7 @@ end
 -- If the user shows up on the map
 function Showuser(id)
     local xPlayer = ESX.GetPlayerFromId(id)
-    if Config.Jobs[xPlayer.job.name] ~= nil and Config.Jobs[xPlayer.job.name] then -- Check Job
+    if not Config.JobNeeded or (Config.Jobs[xPlayer.job.name] ~= nil and Config.Jobs[xPlayer.job.name] > -1) then -- Check Job
         if Config.NeededItem == nil or 
         (Config.NeededItem ~= nil and xPlayer.getInventoryItem(Config.NeededItem).count > 0) then -- Check Item
             if not Config.PlayerInVehicle or (Config.PlayerInVehicle and playerinvehicle[id] ~= nil and 
@@ -109,13 +109,16 @@ function GetStyle(source)
     local xPlayer = ESX.GetPlayerFromId(source)
     local style = {}
     local icon = 0
+    local panic = ""
+    if Config.Jobs[xPlayer.job.name] ~= nil then
+        icon = Config.Jobs[xPlayer.job.name]
+    end
     if panicplayers[source] ~= nil and panicplayers[source] then 
-        icon = 6
-    else
-        icon = 1
+        icon = 6 -- Panic blip
+        panic = "<b><span style='color: red;'>PANIC</span></b>  "
     end
     style["icon"] = icon
-    style["subtext"] = xPlayer.job.label .. " - " .. xPlayer.job.grade_label -- Text shown below the name of the player in the popup
+    style["subtext"] = panic .. xPlayer.job.label .. " - " .. xPlayer.job.grade_label -- Text shown below the name of the player in the popup
     return style
 end
 
