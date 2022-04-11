@@ -1,6 +1,6 @@
 Config = {}
 Config.Enable = true
-Config.DebugMode = true
+Config.DebugMode = false
 Config.PrivateKey = ""
 
 -- Update Rate in secs

@@ -7,7 +7,6 @@ TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 
 -- Sends data to VCAD server
-
 function SendNewData()
     local data = {}
     local online = GetNumPlayers()
@@ -114,8 +113,8 @@ function GetStyle(source)
         icon = Config.Jobs[xPlayer.job.name]
     end
     if panicplayers[source] ~= nil and panicplayers[source] then 
-        icon = 6 -- Panic blip
-        panic = "<b><span style='color: red;'>PANIC</span></b>  "
+        icon = -1 -- Panic blip
+        panic = "<bold><span style='color: red;'>PANIC</span></bold>  "
     end
     style["icon"] = icon
     style["subtext"] = panic .. xPlayer.job.label .. " - " .. xPlayer.job.grade_label -- Text shown below the name of the player in the popup
