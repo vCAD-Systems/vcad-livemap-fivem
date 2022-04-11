@@ -5,6 +5,7 @@ local endpoint = "livemap-server.php"
 local noplayers = false
 local playerinvehicle = {}
 local panicplayers = {}
+local playeruntrackable = {}
 ESX = nil
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
@@ -80,6 +81,9 @@ end
 
 -- If the user shows up on the map
 function Showuser(id)
+    if playeruntrackable[id] ~= nil and playeruntrackable[id] then
+        return false
+    end 
     local xPlayer = ESX.GetPlayerFromId(id)
     if not Config.JobNeeded or (Config.Jobs[xPlayer.job.name] ~= nil and Config.Jobs[xPlayer.job.name] > -1) then -- Check Job
         if Config.NeededItem == nil or 
@@ -115,10 +119,6 @@ function GetStyle(source)
     if Config.Jobs[xPlayer.job.name] ~= nil then
         icon = Config.Jobs[xPlayer.job.name]
     end
-    if panicplayers[source] ~= nil and panicplayers[source] then 
-        icon = -1 -- Panic blip
-        panic = "<bold><span style='color: red;'>PANIC</span></bold>  "
-    end
     if playerinvehicle[source] ~= nil then
         if playerinvehicle[source]["type"] == "car" then
             icon = icon + 10
@@ -129,6 +129,10 @@ function GetStyle(source)
         if playerinvehicle[source]["type"] == "heli" then
             icon = icon + 30
         end
+    end
+    if panicplayers[source] ~= nil and panicplayers[source] then 
+        icon = -1 -- Panic blip
+        panic = "<bold><span style='color: red;'>PANIC</span></bold>  "
     end
     style["icon"] = icon
     style["subtext"] = panic .. xPlayer.job.label .. " - " .. xPlayer.job.grade_label -- Text shown below the name of the player in the popup
@@ -230,6 +234,22 @@ if Config.CommandPanic then
             p = false
         end
         panic(source, p)
+    end, false)
+end
+
+-- Adds /gps command if enabled in config
+-- Use `/gps on` to enable gps [default]
+-- Use `/gps off` to disable gps
+if Config.CommandGPS then
+    RegisterCommand("gps", function(source, args, raw) 
+        
+        if args[1] ~= nil then
+            if args[1] == "on" then
+                playeruntrackable[source] = false
+            elseif args[1] == "off" then
+                playeruntrackable[source] = true
+            end
+        end
     end, false)
 end
 

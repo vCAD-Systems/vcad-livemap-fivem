@@ -41,6 +41,9 @@ Config.AllowedVehicles = {
 
 -- Enable /panic command
 Config.CommandPanic = true
+-- Enable /gps command
+Config.CommandGPS = true
+
 
 -- Use the ESX identity Ingame name
 -- Only works if ESX identity is installed
