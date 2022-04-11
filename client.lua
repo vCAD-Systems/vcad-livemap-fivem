@@ -1,5 +1,6 @@
 local isinveh = false
 local vehicle = nil
+local type = ""
 Citizen.CreateThread(function()
 
     while true do
@@ -8,7 +9,17 @@ Citizen.CreateThread(function()
             if not isinveh then
                 isinveh = true
                 vehicle = GetEntityModel(GetVehiclePedIsIn(GetPlayerPed(-1), false))
-                TriggerServerEvent("vcad-livemap:vehicle_entered", vehicle)
+                type = ""
+                if IsThisModelACar(vehicle) then
+                    type = "car"
+                end
+                if IsThisModelAHeli(vehicle) then
+                    type = "heli"
+                end
+                if IsThisModelAPlane(vehicle) then
+                    type = "aircraft"
+                end
+                TriggerServerEvent("vcad-livemap:vehicle_entered", vehicle, type)
             end 
         else
             if isinveh then

@@ -1,3 +1,6 @@
+local version = 1
+local startup = false
+local failed = false
 local endpoint = "livemap-server.php"
 local noplayers = false
 local playerinvehicle = {}
@@ -82,7 +85,7 @@ function Showuser(id)
         if Config.NeededItem == nil or 
         (Config.NeededItem ~= nil and xPlayer.getInventoryItem(Config.NeededItem).count > 0) then -- Check Item
             if not Config.PlayerInVehicle or (Config.PlayerInVehicle and playerinvehicle[id] ~= nil and 
-            (Config.AllowedVehicles == nil or Config.AllowedVehicles[playerinvehicle[id]] == true)) then -- Check Vehicle
+            (Config.AllowedVehicles == nil or Config.AllowedVehicles[playerinvehicle[id]["model"]] == true)) then -- Check Vehicle
                 return true
             end
         end
@@ -116,6 +119,17 @@ function GetStyle(source)
         icon = -1 -- Panic blip
         panic = "<bold><span style='color: red;'>PANIC</span></bold>  "
     end
+    if playerinvehicle[source] ~= nil then
+        if playerinvehicle[source]["type"] == "car" then
+            icon = icon + 10
+        end
+        if playerinvehicle[source]["type"] == "aircraft" then
+            icon = icon + 20
+        end
+        if playerinvehicle[source]["type"] == "heli" then
+            icon = icon + 30
+        end
+    end
     style["icon"] = icon
     style["subtext"] = panic .. xPlayer.job.label .. " - " .. xPlayer.job.grade_label -- Text shown below the name of the player in the popup
     return style
@@ -143,8 +157,10 @@ end
 -- Internal Event
 -- Player entered Vehicle
 RegisterNetEvent("vcad-livemap:vehicle_entered")
-AddEventHandler("vcad-livemap:vehicle_entered", function(model)
-    playerinvehicle[source] = model
+AddEventHandler("vcad-livemap:vehicle_entered", function(model,type)
+    playerinvehicle[source] = {}
+    playerinvehicle[source]["model"] = model
+    playerinvehicle[source]["type"] = type
 end)
 
 -- Internal Event
@@ -162,6 +178,48 @@ AddEventHandler("vcad-livemap:panic", function(state)
     panic(source, state)
 end)
 
+
+function PerformVersionCheck()
+
+    PerformHttpRequest("https://livemap.vcad.li/version.php?type=esx&version="..version, function (errorCode, resultData, resultHeaders)
+        deb(errorCode)
+        deb(resultData)
+        local data = json.decode(resultData)
+
+        local current = data.current
+        local minimum = data.minimum
+        local updatelink = data.link
+        local message = data.message
+        local changelog = data.changelog
+        if version == current then
+            startup = true
+            print("Gestartet. Version aktuell")
+        else
+            if version >= minimum then
+                startup = true
+                print("Eine neue Version ist verfügbar. Bitte aktualisiere das Script. Link zur aktuellen Version:")
+                print(updatelink)
+            else
+                print("Eine neue Version ist verfügbar. Diese Version ist nicht mehr kompatibel. Das Script wird sich deaktivieren. Um die LiveMap weiter zu nutzen, aktualisiere das Script.")
+                print("Link zur aktuellen Version: "..updatelink)
+                failed = true
+            end
+            if #changelog > 0 then
+                print("Changelog:")
+                for key,value in pairs(changelog) do --actualcode
+                    print("Version "..value["version"].. ": ".. value["text"])
+                end
+                
+            end
+        end
+        if message ~= nil and message ~= "" then
+            print(message)
+        end
+    end)
+
+end
+
+
 -- Adds the /panic command if enabled in config
 -- Use `/panic` to raise the alarm
 -- Use `/panic reset` to reset the alarm
@@ -176,9 +234,15 @@ if Config.CommandPanic then
 end
 
 Citizen.CreateThread(function()
+    PerformVersionCheck()
     Citizen.Wait(1000)
     while true do
-        SendNewData()
+        if failed then
+            break
+        end
+        if Config.Enable and startup then
+            SendNewData()
+        end        
         Citizen.Wait(1000 * Config.UpdateRate)
     end
 end)
