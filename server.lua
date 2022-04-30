@@ -65,8 +65,8 @@ end
 -- used in checking if update is needed
 function GetNumPlayers()
     local i = 0
-    for id, _ in ipairs(GetPlayers()) do
-        if Showuser(id) then
+    for _, v in ipairs(GetPlayers()) do
+        if Showuser(v) then
             i = i + 1
         end
     end
