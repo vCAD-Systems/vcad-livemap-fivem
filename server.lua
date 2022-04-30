@@ -71,8 +71,8 @@ end
 -- used in checking if update is needed
 function GetNumPlayers()
     local i = 0
-    for id, _ in ipairs(ESX.GetPlayers()) do
-        if Showuser(id) then
+    for _, k in ipairs(ESX.GetPlayers()) do
+        if Showuser(k) then
             i = i + 1
         end
     end
@@ -84,6 +84,7 @@ function Showuser(id)
     if playeruntrackable[id] ~= nil and playeruntrackable[id] then
         return false
     end 
+    
     local xPlayer = ESX.GetPlayerFromId(id)
     if not Config.JobNeeded or (Config.Jobs[xPlayer.job.name] ~= nil and Config.Jobs[xPlayer.job.name] > -1) then -- Check Job
         if Config.NeededItem == nil or 
