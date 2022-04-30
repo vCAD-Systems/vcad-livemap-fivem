@@ -6,8 +6,6 @@ local noplayers = false
 local playerinvehicle = {}
 local panicplayers = {}
 local playeruntrackable = {}
-ESX = nil
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 
 -- Sends data to VCAD server
@@ -22,10 +20,10 @@ function SendNewData()
         return
     end
 	
-	for k, v in pairs(ESX.GetPlayers()) do
+	for k, v in ipairs(GetPlayers()) do
 		if Showuser(v) then
 			noplayers = false
-			local coords = ESX.GetPlayerFromId(v).coords
+			local coords = GetEntityCoords(GetPlayerPed(v))
             deb(coords)
 			local name = GetDisplayName(v)
 			deb(name)
@@ -56,14 +54,10 @@ function SendNewData()
 end
 
 -- Internal
+-- Modify if you want to display a special name or prefix
 -- Names that gets displayed on the map
 function GetDisplayName(player)
-    if Config.RPName then
-        local xPlayer = ESX.GetPlayerFromId(player)
-        return xPlayer.getName()
-    else
-        return GetPlayerName(player)
-    end
+    return GetPlayerName(player)
 end
 
 -- Internal
@@ -71,7 +65,7 @@ end
 -- used in checking if update is needed
 function GetNumPlayers()
     local i = 0
-    for id, _ in ipairs(ESX.GetPlayers()) do
+    for id, _ in ipairs(GetPlayers()) do
         if Showuser(id) then
             i = i + 1
         end
@@ -84,15 +78,9 @@ function Showuser(id)
     if playeruntrackable[id] ~= nil and playeruntrackable[id] then
         return false
     end 
-    local xPlayer = ESX.GetPlayerFromId(id)
-    if not Config.JobNeeded or (Config.Jobs[xPlayer.job.name] ~= nil and Config.Jobs[xPlayer.job.name] > -1) then -- Check Job
-        if Config.NeededItem == nil or 
-        (Config.NeededItem ~= nil and xPlayer.getInventoryItem(Config.NeededItem).count > 0) then -- Check Item
-            if not Config.PlayerInVehicle or (Config.PlayerInVehicle and playerinvehicle[id] ~= nil and 
-            (Config.AllowedVehicles == nil or Config.AllowedVehicles[playerinvehicle[id]["model"]] == true)) then -- Check Vehicle
-                return true
-            end
-        end
+    if not Config.PlayerInVehicle or (Config.PlayerInVehicle and playerinvehicle[id] ~= nil and 
+    (Config.AllowedVehicles == nil or Config.AllowedVehicles[playerinvehicle[id]["model"]] == true)) then -- Check Vehicle
+        return true
     end
     return false
 end
@@ -112,13 +100,10 @@ icons[6] = "alert"; Blinking blip
 
 ]]
 function GetStyle(source)
-    local xPlayer = ESX.GetPlayerFromId(source)
     local style = {}
-    local icon = 0
+    local icon = Config.Color
     local panic = ""
-    if Config.Jobs[xPlayer.job.name] ~= nil then
-        icon = Config.Jobs[xPlayer.job.name]
-    end
+    
     if playerinvehicle[source] ~= nil then
         if playerinvehicle[source]["type"] == "car" then
             icon = icon + 10
@@ -135,7 +120,7 @@ function GetStyle(source)
         panic = "<bold><span style='color: red;'>PANIC</span></bold>  "
     end
     style["icon"] = icon
-    style["subtext"] = panic .. xPlayer.job.label .. " - " .. xPlayer.job.grade_label -- Text shown below the name of the player in the popup
+    style["subtext"] = panic -- Text shown below the name of the player in the popup
     return style
 end
 
@@ -182,10 +167,9 @@ AddEventHandler("vcad-livemap:panic", function(state)
     panic(source, state)
 
     if state and Config.ShowPanicNotfication then
-        for id, _ in ipairs(ESX.GetPlayers()) do
+        for id, _ in ipairs(GetPlayers()) do
             if id ~= source then
-                local xPlayer = ESX.GetPlayerFromId(id)
-                xPlayer.showNotification("~r~Ein Panicbutten wurde gedrückt", false, true, 90)
+                ShowNotify("Ein Panicbutten wurde gedrückt")
             end
         end
     end
@@ -193,9 +177,17 @@ AddEventHandler("vcad-livemap:panic", function(state)
 end)
 
 
+-- Native implementation to show notification
+function ShowNotify(message)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentString(message)
+	DrawNotification(0,1)
+end
+
+
 function PerformVersionCheck()
 
-    PerformHttpRequest("https://livemap.vcad.li/version.php?type=esx&version="..version, function (errorCode, resultData, resultHeaders)
+    PerformHttpRequest("https://livemap.vcad.li/version.php?type=standalone&version="..version, function (errorCode, resultData, resultHeaders)
         deb(errorCode)
         deb(resultData)
         local data = json.decode(resultData)
@@ -220,7 +212,7 @@ function PerformVersionCheck()
             end
             if #changelog > 0 then
                 print("Changelog:")
-                for key,value in pairs(changelog) do --actualcode
+                for key,value in pairs(changelog) do
                     print("Version "..value["version"].. ": ".. value["text"])
                 end
                 
@@ -276,6 +268,3 @@ Citizen.CreateThread(function()
         Citizen.Wait(1000 * Config.UpdateRate)
     end
 end)
-
-
-

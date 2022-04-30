@@ -1,7 +1,7 @@
 Config = {}
 Config.Enable = true
 Config.DebugMode = false
-Config.PrivateKey = ""
+Config.PrivateKey = "yT8kmhcdfOMrF3e"
 
 -- Update Rate in secs
 Config.UpdateRate = 1
@@ -11,8 +11,7 @@ Config.JobNeeded = true
 
 
 --[[
-Allowed jobs and the assigned blipcolor
-["job"] = color
+Blipcolor
 
 1 = white
 2 = blue
@@ -20,16 +19,7 @@ Allowed jobs and the assigned blipcolor
 4 = red
 5 = yellow
 ]]
-Config.Jobs = {
-    ['police'] = 2,
-    ['fib'] = 1,
-    ['ambulance'] = 4,
-    ['mechanic'] = 5
-}
-
--- If item is needed in Inventory
--- "item name" or nil
-Config.NeededItem = nil
+Config.Color = 1
 
 -- If player needs to be in an vehicle
 Config.PlayerInVehicle = false
@@ -45,10 +35,5 @@ Config.CommandPanic = true
 Config.CommandGPS = true
 
 
--- Use the ESX identity Ingame name
--- Only works if ESX identity is installed
-Config.RPName = true
-
-
--- Should everyone with the same job get a notification if someone panics
+-- Should everyone get a notification if someone panics
 Config.ShowPanicNotfication = true
