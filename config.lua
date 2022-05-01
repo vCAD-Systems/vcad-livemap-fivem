@@ -1,7 +1,7 @@
 Config = {}
 Config.Enable = true
-Config.DebugMode = true
-Config.PrivateKey = "yT8kmhcdfOMrF3e"
+Config.DebugMode = false
+Config.PrivateKey = ""
 
 -- Update Rate in secs
 Config.UpdateRate = 1
@@ -22,7 +22,6 @@ Allowed jobs and the assigned blipcolor
 ]]
 Config.Jobs = {
     ['police'] = 2,
-    ['fib'] = 1,
     ['ambulance'] = 4,
     ['mechanic'] = 5
 }
@@ -45,8 +44,7 @@ Config.CommandPanic = true
 Config.CommandGPS = true
 
 
--- Use the ESX identity Ingame name
--- Only works if ESX identity is installed
+-- Use the RP Name of the Character
 Config.RPName = true
 
 
