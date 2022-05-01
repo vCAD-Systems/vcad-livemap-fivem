@@ -69,10 +69,8 @@ end
 -- used in checking if update is needed
 function GetNumPlayers()
     local i = 0
-    for i, _ in ipairs(QBCore.Functions.GetQBPlayers()) do
-        print(i)
-        print(Showuser(i))
-        if Showuser(i) then
+    for v, _ in ipairs(QBCore.Functions.GetQBPlayers()) do
+        if Showuser(v) then
             i = i + 1
         end
     end
