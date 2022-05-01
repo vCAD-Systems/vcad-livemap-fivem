@@ -144,6 +144,13 @@ end
 -- Gets called when update to panic state is recieved via event or via command
 function panic(source, state)
     panicplayers[source] = state
+    if state and Config.ShowPanicNotfication then
+        for k,_  in pairs(QBCore.Functions.GetQBPlayers()) do
+            if k ~= source then
+                TriggerClientEvent("vcad-livemap:notify", k, "Ein Panicbutten wurde gedrückt")
+            end
+        end
+    end
 end
 
 -- Debug Messages if Debug is enabled in config
@@ -182,16 +189,6 @@ end)
 RegisterNetEvent("vcad-livemap:panic")
 AddEventHandler("vcad-livemap:panic", function(state)
     panic(source, state)
-
-    if state and Config.ShowPanicNotfication then
-        for k,_  in pairs(QBCore.Functions.GetQBPlayers()) do
-            if k ~= source then
-                --TODO: Add Notification
-                --local player = ESX.GetPlayerFromId(k)
-                --xPlayer.showNotification("~r~Ein Panicbutten wurde gedrückt", false, true, 90)
-            end
-        end
-    end
 end)
 
 

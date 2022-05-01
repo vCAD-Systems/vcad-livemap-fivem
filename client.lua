@@ -33,3 +33,10 @@ Citizen.CreateThread(function()
 
     end
 end)
+
+RegisterNetEvent("vcad-livemap:notify")
+AddEventHandler("vcad-livemap:notify", function(text) 
+    SetNotificationTextEntry('STRING')
+    AddTextComponentSubstringPlayerName(text)
+    DrawNotification(false, true)
+end)
