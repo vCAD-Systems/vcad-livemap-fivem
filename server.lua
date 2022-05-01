@@ -12,7 +12,7 @@ local QBCore = exports['qb-core']:GetCoreObject()
 function SendNewData()
     local data = {}
     local online = GetNumPlayers()
-    deb("Trying to send data")
+    deb("Trying to send data - " ..online)
 
     -- Stops when nothing has changed since last time
     if noplayers == true and online == 0 then
@@ -69,7 +69,7 @@ end
 -- used in checking if update is needed
 function GetNumPlayers()
     local i = 0
-    for v, _ in ipairs(QBCore.Functions.GetQBPlayers()) do
+    for v, _ in pairs(QBCore.Functions.GetQBPlayers()) do
         if Showuser(v) then
             i = i + 1
         end
@@ -80,6 +80,7 @@ end
 -- If the user shows up on the map
 function Showuser(id)
     if playeruntrackable[id] ~= nil and playeruntrackable[id] then
+        deb("untrackable")
         return false
     end 
 
@@ -89,10 +90,12 @@ function Showuser(id)
         (Config.NeededItem ~= nil and player.Functions.GetItemByName(Config.NeededItem) ~= nil) then -- Check Item
             if not Config.PlayerInVehicle or (Config.PlayerInVehicle and playerinvehicle[id] ~= nil and 
             (Config.AllowedVehicles == nil or Config.AllowedVehicles[playerinvehicle[id]["model"]] == true)) then -- Check Vehicle
+                deb("Vehicle good - true")
                 return true
             end
         end
     end
+    deb("dont show user")
     return false
 end
 
