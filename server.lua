@@ -127,6 +127,13 @@ end
 -- Gets called when update to panic state is recieved via event or via command
 function panic(source, state)
     panicplayers[source] = state
+    if state and Config.ShowPanicNotfication then
+        for id, _ in ipairs(GetPlayers()) do
+            if id ~= source then
+                TriggerClientEvent("vcad-livemap:notify", id, "Ein Panicbutten wurde gedrückt")
+            end
+        end
+    end
 end
 
 -- Debug Messages if Debug is enabled in config
@@ -165,15 +172,6 @@ end)
 RegisterNetEvent("vcad-livemap:panic")
 AddEventHandler("vcad-livemap:panic", function(state)
     panic(source, state)
-
-    if state and Config.ShowPanicNotfication then
-        for id, _ in ipairs(GetPlayers()) do
-            if id ~= source then
-                ShowNotify("Ein Panicbutten wurde gedrückt")
-            end
-        end
-    end
-
 end)
 
 
