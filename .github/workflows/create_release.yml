@@ -31,6 +31,12 @@ jobs:
         with:
           ref: qbcore
           path: vCad-livemap-qb
+      
+      # Delete .git folders from releases
+      - run: rm -rf vCad-livemap-esx/.git
+      - run: rm -rf vCad-livemap-fivem/.git
+      - run: rm -rf vCad-livemap-qb/.git
+
     # Delete release before creating it new
       - uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
