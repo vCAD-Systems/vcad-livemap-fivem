@@ -1,0 +1,41 @@
+name: Generate-Artfiacts
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: esx
+          path: vCad-livemap-esx
+      - uses: actions/checkout@v3
+        with:
+          ref: standalone
+          path: vCad-livemap-fivem
+      - uses: actions/checkout@v3
+        with:
+          ref: qbcore
+          path: vCad-livemap-qb
+      
+      # Delete .git folders from releases
+      - run: rm -rf vCad-livemap-esx/.git
+      - run: rm -rf vCad-livemap-fivem/.git
+      - run: rm -rf vCad-livemap-qb/.git
+      
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r vCad-livemap-esx.zip vCad-livemap-esx
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r vCad-livemap-fivem.zip vCad-livemap-fivem
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r vCad-livemap-qbcore.zip vCad-livemap-qb
+      
+      - uses: actions/upload-artifact@v3
+        with:
+          name: vcad-livemap
+          path: "*.zip"
