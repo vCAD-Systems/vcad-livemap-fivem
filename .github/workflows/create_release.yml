@@ -31,7 +31,14 @@ jobs:
         with:
           ref: qbcore
           path: vCad-livemap-qb
-
+    # Delete release before creating it new
+      - uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: true
+          tag_name: latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
