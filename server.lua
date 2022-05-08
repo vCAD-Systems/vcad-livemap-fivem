@@ -174,6 +174,15 @@ AddEventHandler("vcad-livemap:panic", function(state)
     panic(source, state)
 end)
 
+-- External Event
+-- To be triggert by external panic script
+-- state: if gps for this player is disabled or not
+RegisterNetEvent("vcad-livemap:disablegps")
+AddEventHandler("vcad-livemap:disablegps", function(state)
+    local _source = source
+    playeruntrackable[_source] = state
+end)
+
 
 -- Native implementation to show notification
 function ShowNotify(message)
