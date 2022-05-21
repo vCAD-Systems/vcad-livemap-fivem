@@ -68,7 +68,7 @@ Muss der Spieler einen spezifischen Job haben, um auf der LiveMap angezeigt zu w
 ##### Config.Jobs
 Eine Lua-Tabelle, welche Jobs auf der LiveMap angezeigt werden sollen und in welcher Farbe.
 ```lua
-["job"] = color
+["job"] = farbe
 ```
 | **Farbe** | **Nummer** |
 |-----------|------------|
@@ -96,6 +96,8 @@ Welche Fahrzeuge sind zugelassen?
 Der Hash ist ein numerischer Wert, welcher von GTAV generiert wird.
 ```lua
 [hash] = true
+-- Beispiel:
+[-1216765807] = true -- Adder
 ```
 
 
