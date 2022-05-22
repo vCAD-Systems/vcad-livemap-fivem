@@ -82,7 +82,7 @@ Eine Lua-Tabelle, welche Jobs auf der LiveMap angezeigt werden sollen und in wel
 ##### Config.NeededItem
 Muss der Spieler ein Item im Inventar haben?
 - Ja `Config.NeededItem = "ITEMNAME"`
-- Nein `Config.NeededItem = null`
+- Nein `Config.NeededItem = nil`
 
 
 ##### Config.PlayerInVehicle
