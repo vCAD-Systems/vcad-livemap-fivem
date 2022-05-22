@@ -6,9 +6,6 @@ Config.PrivateKey = ""
 -- Update Rate in secs
 Config.UpdateRate = 1
 
--- If you need a specific job to be shown
-Config.JobNeeded = true
-
 
 --[[
 Blipcolor
