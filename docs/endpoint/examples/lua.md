@@ -6,7 +6,7 @@ data["privkey"] = "PRIVATE-KEY"
 data["data"] = {}
 
 -- Es können natürlich mehrere Spieler mitgesendet werden.
--- Dafür diesen teil in einem Loop ausführen.
+-- Dafür diesen Teil in einem Loop ausführen.
 local player = {}
 player["name"] = "Name des Spielers"
 player["location"] = {"x":0,"y":0,"z":0}

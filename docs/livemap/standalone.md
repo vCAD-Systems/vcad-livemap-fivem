@@ -29,21 +29,6 @@ Deaktiviert das GPS eines Spielers.
 TriggerServerEvent("vcad-livemap:disablegps", true)
 ```
 
-### Config
-#### Erklärung
-
-##### Config.Enable
-Soll das Script aktiviert werden und Spielerpositionen an die LiveMap gesendet werden?
-- Ja `true`
-- Nein `false`
-
-
-##### Config.DebugMode
-Soll der Debugmode aktiviert werden? Dieser Modus gibt Diagnoseinformationen in der Serverkonsole aus.  
-Für den Produktiv einsatz nicht geeignet.
-- Ja `true`
-- Nein `false`
-
 
 ##### Config.PrivateKey
 Dieser Schlüssel identifiziert das Script bei CopNet. Du erhälst ihn im vCAD-System unter Einstellungen -> Livemap einstellungen
@@ -146,3 +131,19 @@ Config.CommandGPS = true
 -- Should everyone get a notification if someone panics
 Config.ShowPanicNotfication = true
 ```
+
+### Config
+#### Erklärung
+
+##### Config.Enable
+Soll das Script aktiviert werden und Spielerpositionen an die LiveMap gesendet werden?
+- Ja `true`
+- Nein `false`
+
+
+##### Config.DebugMode
+Soll der Debugmode aktiviert werden? Dieser Modus gibt Diagnoseinformationen in der Serverkonsole aus.  
+Für den Produktiv einsatz nicht geeignet.
+- Ja `true`
+- Nein `false`
+
