@@ -4,3 +4,9 @@
   - [Esx](livemap/esx)
   - [Qbcore](livemap/qbcore)
   - [Standalone](livemap/standalone)
+- Erweitert:
+  - [HTTP-Endpoint](endpoint/endpoint)
+  - [Icons](endpoint/icons)
+  - Beispiel-Implementationen:
+    - [Lua](endpoint/examples/lua.md)
+    - [Javascript](endpoint/examples/js.md)
