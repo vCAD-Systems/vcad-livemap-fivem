@@ -47,7 +47,7 @@ Für den Produktiv einsatz nicht geeignet.
 
 
 ##### Config.PrivateKey
-Dieser Schlüssel identifiziert das Script bei CopNet. Du erhälst ihn im VCAD-System unter Einstellungen -> Livemap einstellungen
+Dieser Schlüssel identifiziert das Script bei CopNet. Du erhälst ihn im vCAD-System unter Einstellungen -> Livemap einstellungen
 !> **Wichtig!** Halte diesen Schlüssel geheim, um Manipulation zu verhindern. Solltest du den Schlüssel verlieren, kannst du ihn in den Einstellungen zurücksetzen
 Der Text muss zwischen zwei Anführungszeichen `"` gesetzt werden.
 
