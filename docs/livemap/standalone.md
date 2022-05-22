@@ -1,6 +1,6 @@
 # Standalone
 
-Die Standalone version ist mit allen FiveM-Frameworks kompatibel.
+Die Standalone version ist mit allen FiveM-Frameworks kompatibel.  
 [Download hier](download)  
 
 ### Installation

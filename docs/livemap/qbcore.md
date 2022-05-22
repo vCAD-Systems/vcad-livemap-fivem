@@ -1,6 +1,6 @@
 # QBCore
 
-Die QBCore Version ist nur mit dem QBCore-Framwork für FiveM kompatibel
+Die QBCore Version ist nur mit dem QBCore-Framwork für FiveM kompatibel  
 [Download hier](download)  
 
 ### Installation
