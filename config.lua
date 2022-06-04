@@ -6,6 +6,15 @@ Config.PrivateKey = ""
 -- Update Rate in secs
 Config.UpdateRate = 1
 
+--[[
+ System where the players should be shown
+
+ - "copnet" - Only CopNet
+ - "medicnet" - Only MedicNet
+ - "carnet" - Only CarNet
+ - "*" - All systems
+]]
+Config.System = "copnet"
 
 --[[
 Blipcolor

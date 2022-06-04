@@ -29,6 +29,7 @@ function SendNewData()
 			deb(name)
 			local d = {}
 			d["name"] = name
+            d["system"] = Config.System
 			d["location"] = coords
             d["style"] = GetStyle(v)
 			table.insert(data, d)
