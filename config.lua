@@ -12,19 +12,25 @@ Config.JobNeeded = true
 
 --[[
 Allowed jobs and the assigned blipcolor
-["job"] = color
 
+color:
 1 = white
 2 = blue
 3 = green
 4 = red
 5 = yellow
+
+systems:
+- copnet
+- medicnet
+- carnet
+- * (All Systems)
 ]]
 Config.Jobs = {
-    ['police'] = 2,
-    ['fib'] = 1,
-    ['ambulance'] = 4,
-    ['mechanic'] = 5
+    ['police'] =    {['color'] = 2, ['system'] = "copnet"},
+    ['fib'] =       {['color'] = 1, ['system'] = "copnet"},
+    ['ambulance'] = {['color'] = 4, ['system'] = "medicnet"},
+    ['mechanic'] =  {['color'] = 5, ['system'] = "carnet"}
 }
 
 -- If item is needed in Inventory

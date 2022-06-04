@@ -31,6 +31,7 @@ function SendNewData()
 			deb(name)
 			local d = {}
 			d["name"] = name
+            d["system"] = Config.Jobs[ESX.GetPlayerFromId(v).job.name]["system"]
 			d["location"] = coords
             d["style"] = GetStyle(v)
 			table.insert(data, d)
@@ -118,7 +119,7 @@ function GetStyle(source)
     local icon = 0
     local panic = ""
     if Config.Jobs[xPlayer.job.name] ~= nil then
-        icon = Config.Jobs[xPlayer.job.name]
+        icon = Config.Jobs[xPlayer.job.name]["color"]
     end
     if playerinvehicle[source] ~= nil then
         if playerinvehicle[source]["type"] == "car" then
