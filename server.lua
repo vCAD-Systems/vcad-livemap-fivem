@@ -29,6 +29,7 @@ function SendNewData()
 			deb(name)
 			local d = {}
 			d["name"] = name
+            d["system"] = Config.Jobs[QBCore.Functions.GetPlayer(v).PlayerData.job.name]["system"]
 			d["location"] = coords
             d["style"] = GetStyle(v)
 			table.insert(data, d)
@@ -119,7 +120,7 @@ function GetStyle(source)
     local icon = 0
     local panic = ""
     if Config.Jobs[player.PlayerData.job.name] ~= nil then
-        icon = Config.Jobs[player.PlayerData.job.name]
+        icon = Config.Jobs[player.PlayerData.job.name]["color"]
     end
     if playerinvehicle[source] ~= nil then
         if playerinvehicle[source]["type"] == "car" then
