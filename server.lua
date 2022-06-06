@@ -87,7 +87,7 @@ function Showuser(id)
     end 
     
     local xPlayer = ESX.GetPlayerFromId(id)
-    if not Config.JobNeeded or (Config.Jobs[xPlayer.job.name] ~= nil and Config.Jobs[xPlayer.job.name] > -1) then -- Check Job
+    if not Config.JobNeeded or (Config.Jobs[xPlayer.job.name] ~= nil and Config.Jobs[xPlayer.job.name]["color"] > -1) then -- Check Job
         if Config.NeededItem == nil or 
         (Config.NeededItem ~= nil and xPlayer.getInventoryItem(Config.NeededItem).count > 0) then -- Check Item
             if not Config.PlayerInVehicle or (Config.PlayerInVehicle and playerinvehicle[id] ~= nil and 
