@@ -199,7 +199,12 @@ function PerformVersionCheck()
         deb(errorCode)
         deb(resultData)
         local data = json.decode(resultData)
-
+	if data == nil or data.error ~= nil then
+            print("Die LiveMap-Version konnte nicht überprüft werden. Bitte wende dich an den vCAD-Support.")
+            if data ~= nil and data.message ~= nil then
+                print(data.message)
+            end
+        end
         local current = data.current
         local minimum = data.minimum
         local updatelink = data.link
