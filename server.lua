@@ -201,7 +201,10 @@ AddEventHandler("vcad-livemap:disablegps", function(state)
     local _source = source
     playeruntrackable[_source] = state
 end)
-
+RegisterNetEvent("vcad-livemap:disableothergps")
+AddEventHandler("vcad-livemap:disableothergps", function(ply, state)
+    playeruntrackable[ply] = state
+end)
 
 function PerformVersionCheck()
 
