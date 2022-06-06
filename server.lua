@@ -86,7 +86,7 @@ function Showuser(id)
     end 
 
     local player = QBCore.Functions.GetPlayer(id)
-    if not Config.JobNeeded or (Config.Jobs[player.PlayerData.job.name] ~= nil and Config.Jobs[player.PlayerData.job.name] > -1) then -- Check Job
+    if not Config.JobNeeded or (Config.Jobs[player.PlayerData.job.name] ~= nil and Config.Jobs[player.PlayerData.job.name]["color"] > -1) then -- Check Job
         if Config.NeededItem == nil or 
         (Config.NeededItem ~= nil and player.Functions.GetItemByName(Config.NeededItem) ~= nil) then -- Check Item
             if not Config.PlayerInVehicle or (Config.PlayerInVehicle and playerinvehicle[id] ~= nil and 
