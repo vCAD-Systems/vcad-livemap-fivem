@@ -1,4 +1,4 @@
-local version = 1
+local version = 2
 local startup = false
 local failed = false
 local endpoint = "livemap-server.php"
@@ -144,6 +144,15 @@ end
 -- Gets called when update to panic state is recieved via event or via command
 function panic(source, state)
     panicplayers[source] = state
+
+    if state and Config.ShowPanicNotfication then
+        for id, _ in ipairs(ESX.GetPlayers()) do
+            if id ~= source then
+                local xPlayer = ESX.GetPlayerFromId(id)
+                xPlayer.showNotification("~r~Ein Panicbutten wurde gedrückt", false, true, 90)
+            end
+        end
+    end
 end
 
 -- Debug Messages if Debug is enabled in config
@@ -182,16 +191,6 @@ end)
 RegisterNetEvent("vcad-livemap:panic")
 AddEventHandler("vcad-livemap:panic", function(state)
     panic(source, state)
-
-    if state and Config.ShowPanicNotfication then
-        for id, _ in ipairs(ESX.GetPlayers()) do
-            if id ~= source then
-                local xPlayer = ESX.GetPlayerFromId(id)
-                xPlayer.showNotification("~r~Ein Panicbutten wurde gedrückt", false, true, 90)
-            end
-        end
-    end
-
 end)
 
 
