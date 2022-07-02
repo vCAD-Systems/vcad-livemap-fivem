@@ -25,14 +25,19 @@ function SendNewData()
 	for k, v in pairs(ESX.GetPlayers()) do
 		if Showuser(v) then
 			noplayers = false
-			local coords = ESX.GetPlayerFromId(v).coords
-            deb(coords)
+			local coords = ESX.GetPlayerFromId(v).coords2
+            deb(type(coords))
 			local name = GetDisplayName(v)
 			deb(name)
 			local d = {}
 			d["name"] = name
             d["system"] = Config.Jobs[ESX.GetPlayerFromId(v).job.name]["system"]
-			d["location"] = coords
+			
+            if type(coords) == "table" then
+                d["location"] = coords
+            else
+                d["location"] = ESX.GetPlayerFromId(v).getCoords()
+            end
             d["style"] = GetStyle(v)
 			table.insert(data, d)
 		end
