@@ -151,10 +151,13 @@ function panic(source, state)
     panicplayers[source] = state
 
     if state and Config.ShowPanicNotfication then
-        for id, _ in ipairs(ESX.GetPlayers()) do
+        local job = ESX.GetPlayerFromId(source).getJob()["name"]
+        for _, id in ipairs(ESX.GetPlayers()) do
             if id ~= source then
                 local xPlayer = ESX.GetPlayerFromId(id)
-                xPlayer.showNotification("~r~Ein Panicbutten wurde gedrückt", false, true, 90)
+                if xPlayer.getJob()["name"] == job then
+                    xPlayer.showNotification("~r~Ein Panicbutten wurde gedrückt", false, true, 90)
+                end
             end
         end
     end
