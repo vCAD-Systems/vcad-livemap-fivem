@@ -1,4 +1,4 @@
-local version = 3
+local version = 4
 local startup = false
 local failed = false
 local endpoint = "livemap-server.php"
