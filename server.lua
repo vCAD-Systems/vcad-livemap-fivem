@@ -6,14 +6,16 @@ local noplayers = false
 local playerinvehicle = {}
 local panicplayers = {}
 local playeruntrackable = {}
+
 ESX = nil
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 
 -- Sends data to VCAD server
 function SendNewData()
-    local data = {}
     local online = GetNumPlayers()
+    local data = {}
+
     deb("Trying to send data")
 
     -- Stops when nothing has changed since last time
@@ -24,21 +26,26 @@ function SendNewData()
 	
 	for k, v in pairs(ESX.GetPlayers()) do
 		if Showuser(v) then
+            local xPlayer = ESX.GetPlayerFromId(v)
 			noplayers = false
-			local coords = ESX.GetPlayerFromId(v).coords2
+
+			local coords = xPlayer.coords2
             deb(type(coords))
-			local name = GetDisplayName(v)
+
+			local name = GetDisplayName(v, xPlayer.name)
 			deb(name)
+
 			local d = {}
 			d["name"] = name
-            d["system"] = Config.Jobs[ESX.GetPlayerFromId(v).job.name]["system"]
+            d["system"] = Config.Jobs[xPlayer.job.name]["system"]
 			
             if type(coords) == "table" then
                 d["location"] = coords
             else
-                d["location"] = ESX.GetPlayerFromId(v).getCoords()
+                d["location"] = xPlayer.getCoords()
             end
-            d["style"] = GetStyle(v)
+
+            d["style"] = GetStyle(v, xPlayer.job)
 			table.insert(data, d)
 		end
 	end
@@ -46,9 +53,11 @@ function SendNewData()
     local senddata = {}
     senddata["data"] = data
     senddata["privkey"] = Config.PrivateKey
+
     local header = {}
     header["content-type"] = "application/x-www-form-urlencoded"
     deb("Sending request to VCAD")
+
     local time = os.time();
     PerformHttpRequest("https://livemap.vcad.li/"..endpoint, function (errorCode, resultData, resultHeaders)
         deb(errorCode)
@@ -63,10 +72,9 @@ end
 
 -- Internal
 -- Names that gets displayed on the map
-function GetDisplayName(player)
+function GetDisplayName(player, xPlayerName)
     if Config.RPName then
-        local xPlayer = ESX.GetPlayerFromId(player)
-        return xPlayer.getName()
+        return xPlayerName
     else
         return GetPlayerName(player)
     end
@@ -77,11 +85,13 @@ end
 -- used in checking if update is needed
 function GetNumPlayers()
     local i = 0
+
     for _, k in ipairs(ESX.GetPlayers()) do
         if Showuser(k) then
             i = i + 1
         end
     end
+    
     return i
 end
 
@@ -92,15 +102,18 @@ function Showuser(id)
     end 
     
     local xPlayer = ESX.GetPlayerFromId(id)
+
     if not Config.JobNeeded or (Config.Jobs[xPlayer.job.name] ~= nil and Config.Jobs[xPlayer.job.name]["color"] > -1) then -- Check Job
         if Config.NeededItem == nil or 
-        (Config.NeededItem ~= nil and xPlayer.getInventoryItem(Config.NeededItem).count > 0) then -- Check Item
+            (Config.NeededItem ~= nil and xPlayer.getInventoryItem(Config.NeededItem).count > 0)
+        then -- Check Item    
             if not Config.PlayerInVehicle or (Config.PlayerInVehicle and playerinvehicle[id] ~= nil and 
             (Config.AllowedVehicles == nil or Config.AllowedVehicles[playerinvehicle[id]["model"]] == true)) then -- Check Vehicle
                 return true
             end
         end
     end
+
     return false
 end
 
@@ -118,13 +131,12 @@ icons[5] = "yellow";
 icons[6] = "alert"; Blinking blip
 
 ]]
-function GetStyle(source)
-    local xPlayer = ESX.GetPlayerFromId(source)
+function GetStyle(source, xPlayerJob)
     local style = {}
     local icon = 0
     local panic = ""
-    if Config.Jobs[xPlayer.job.name] ~= nil then
-        icon = Config.Jobs[xPlayer.job.name]["color"]
+    if Config.Jobs[xPlayerJob.name] ~= nil then
+        icon = Config.Jobs[xPlayerJob.name]["color"]
     end
     if playerinvehicle[source] ~= nil then
         if playerinvehicle[source]["type"] == "car" then
@@ -142,7 +154,7 @@ function GetStyle(source)
         panic = "<bold><span style='color: red;'>PANIC</span></bold>  "
     end
     style["icon"] = icon
-    style["subtext"] = panic .. xPlayer.job.label .. " - " .. xPlayer.job.grade_label -- Text shown below the name of the player in the popup
+    style["subtext"] = panic .. xPlayerJob.label .. " - " .. xPlayerJob.grade_label -- Text shown below the name of the player in the popup
     return style
 end
 
@@ -151,11 +163,13 @@ function panic(source, state)
     panicplayers[source] = state
 
     if state and Config.ShowPanicNotfication then
-        local job = ESX.GetPlayerFromId(source).getJob()["name"]
+        local job = ESX.GetPlayerFromId(source).job.name
+
         for _, id in ipairs(ESX.GetPlayers()) do
             if id ~= source then
                 local xPlayer = ESX.GetPlayerFromId(id)
-                if xPlayer.getJob()["name"] == job then
+
+                if xPlayer.job.name == job then
                     xPlayer.showNotification("~r~Ein Panicbutten wurde gedrückt", false, true, 90)
                 end
             end
@@ -216,8 +230,7 @@ AddEventHandler("vcad-livemap:disableothergps", function(ply, state)
 end)
 
 function PerformVersionCheck()
-
-    PerformHttpRequest("https://livemap.vcad.li/version.php?type=esx&version="..version, function (errorCode, resultData, resultHeaders)
+    PerformHttpRequest("https://livemap.vcad.li/version.php?type=esx&version="..version, function(errorCode, resultData, resultHeaders)
         deb(errorCode)
         deb(resultData)
         local data = json.decode(resultData)
@@ -227,32 +240,37 @@ function PerformVersionCheck()
         local updatelink = data.link
         local message = data.message
         local changelog = data.changelog
+
         if version == current then
             startup = true
-            print("Gestartet. Version aktuell")
+
+            print("[VCAD-LIVEMAP] Gestartet. Version aktuell")
         else
             if version >= minimum then
                 startup = true
-                print("Eine neue Version ist verfügbar. Bitte aktualisiere das Script. Link zur aktuellen Version:")
+                
+                print("[VCAD-LIVEMAP] Eine neue Version ist verfügbar. Bitte aktualisiere das Script. Link zur aktuellen Version:")
                 print(updatelink)
             else
-                print("Eine neue Version ist verfügbar. Diese Version ist nicht mehr kompatibel. Das Script wird sich deaktivieren. Um die LiveMap weiter zu nutzen, aktualisiere das Script.")
-                print("Link zur aktuellen Version: "..updatelink)
                 failed = true
+
+                print("[VCAD-LIVEMAP] Eine neue Version ist verfügbar. Diese Version ist nicht mehr kompatibel. Das Script wird sich deaktivieren. Um die LiveMap weiter zu nutzen, aktualisiere das Script.")
+                print("[VCAD-LIVEMAP] Link zur aktuellen Version: "..updatelink)
             end
+
             if #changelog > 0 then
-                print("Changelog:")
+                print("[VCAD-LIVEMAP] Changelog:")
+
                 for key,value in pairs(changelog) do --actualcode
-                    print("Version "..value["version"].. ": ".. value["text"])
+                    print("[VCAD-LIVEMAP] Version "..value["version"].. ": ".. value["text"])
                 end
-                
             end
         end
+
         if message ~= nil and message ~= "" then
             print(message)
         end
     end)
-
 end
 
 
@@ -288,13 +306,16 @@ end
 Citizen.CreateThread(function()
     PerformVersionCheck()
     Citizen.Wait(1000)
+    
     while true do
         if failed then
             break
         end
+        
         if Config.Enable and startup then
             SendNewData()
-        end        
+        end
+
         Citizen.Wait(1000 * Config.UpdateRate)
     end
 end)
