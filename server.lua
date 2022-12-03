@@ -220,7 +220,7 @@ function PerformVersionCheck()
         local changelog = data.changelog
         if version == current then
             startup = true
-            print("[VCAD-LIVEMAP] [VCAD-LIVEMAP] Gestartet. Version aktuell")
+            print("[VCAD-LIVEMAP] Gestartet. Version aktuell")
         else
             if version >= minimum then
                 startup = true
