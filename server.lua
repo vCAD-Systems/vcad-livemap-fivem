@@ -22,16 +22,18 @@ function SendNewData()
 	
 	for v, _ in pairs(QBCore.Functions.GetQBPlayers()) do
 		if Showuser(v) then
+            local QBPlayer = QBCore.Functions.GetPlayer(v)
+
 			noplayers = false
 			local coords = GetEntityCoords(GetPlayerPed(v))
             deb(coords)
-			local name = GetDisplayName(v)
+			local name = GetDisplayName(v, QBPlayer.PlayerData.charinfo)
 			deb(name)
 			local d = {}
 			d["name"] = name
-            d["system"] = Config.Jobs[QBCore.Functions.GetPlayer(v).PlayerData.job.name]["system"]
+            d["system"] = Config.Jobs[QBPlayer.PlayerData.job.name]["system"]
 			d["location"] = coords
-            d["style"] = GetStyle(v)
+            d["style"] = GetStyle(v, QBPlayer.PlayerData)
 			table.insert(data, d)
 		end
 	end
@@ -56,10 +58,9 @@ end
 
 -- Internal
 -- Names that gets displayed on the map
-function GetDisplayName(player)
+function GetDisplayName(player, QBPlayerCharInfo)
     if Config.RPName then
-        local player = QBCore.Functions.GetPlayer(player)
-        return player.PlayerData.charinfo.firstname .. " " .. player.PlayerData.charinfo.lastname
+        return QBPlayerCharInfo.firstname .. " " .. QBPlayerCharInfo.lastname
     else
         return GetPlayerName(player)
     end
@@ -114,13 +115,12 @@ icons[5] = "yellow";
 icons[6] = "alert"; Blinking blip
 
 ]]
-function GetStyle(source)
-    local player = QBCore.Functions.GetPlayer(source)
+function GetStyle(source, QBPlayerJobData)
     local style = {}
     local icon = 0
     local panic = ""
-    if Config.Jobs[player.PlayerData.job.name] ~= nil then
-        icon = Config.Jobs[player.PlayerData.job.name]["color"]
+    if Config.Jobs[QBPlayerJobData.job.name] ~= nil then
+        icon = Config.Jobs[QBPlayerJobData.job.name]["color"]
     end
     if playerinvehicle[source] ~= nil then
         if playerinvehicle[source]["type"] == "car" then
@@ -138,7 +138,7 @@ function GetStyle(source)
         panic = "<bold><span style='color: red;'>PANIC</span></bold>  "
     end
     style["icon"] = icon
-    style["subtext"] = panic .. player.PlayerData.job.label .. " - " .. player.PlayerData.job.grade.name -- Text shown below the name of the player in the popup
+    style["subtext"] = panic .. QBPlayerJobData.job.label .. " - " .. QBPlayerJobData.job.grade.name -- Text shown below the name of the player in the popup
     return style
 end
 
@@ -220,21 +220,21 @@ function PerformVersionCheck()
         local changelog = data.changelog
         if version == current then
             startup = true
-            print("Gestartet. Version aktuell")
+            print("[VCAD-LIVEMAP] [VCAD-LIVEMAP] Gestartet. Version aktuell")
         else
             if version >= minimum then
                 startup = true
-                print("Eine neue Version ist verfügbar. Bitte aktualisiere das Script. Link zur aktuellen Version:")
+                print("[VCAD-LIVEMAP] Eine neue Version ist verfügbar. Bitte aktualisiere das Script. Link zur aktuellen Version:")
                 print(updatelink)
             else
-                print("Eine neue Version ist verfügbar. Diese Version ist nicht mehr kompatibel. Das Script wird sich deaktivieren. Um die LiveMap weiter zu nutzen, aktualisiere das Script.")
-                print("Link zur aktuellen Version: "..updatelink)
+                print("[VCAD-LIVEMAP] Eine neue Version ist verfügbar. Diese Version ist nicht mehr kompatibel. Das Script wird sich deaktivieren. Um die LiveMap weiter zu nutzen, aktualisiere das Script.")
+                print("[VCAD-LIVEMAP] Link zur aktuellen Version: "..updatelink)
                 failed = true
             end
             if #changelog > 0 then
-                print("Changelog:")
+                print("[VCAD-LIVEMAP] Changelog:")
                 for key,value in pairs(changelog) do
-                    print("Version "..value["version"].. ": ".. value["text"])
+                    print("[VCAD-LIVEMAP] Version "..value["version"].. ": ".. value["text"])
                 end
                 
             end
