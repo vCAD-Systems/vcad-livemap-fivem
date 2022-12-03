@@ -204,7 +204,7 @@ function PerformVersionCheck()
         deb(resultData)
         local data = json.decode(resultData)
 	if data == nil or data.error ~= nil then
-            print("Die LiveMap-Version konnte nicht überprüft werden. Bitte wende dich an den vCAD-Support.")
+            print("[VCAD-LIVEMAP] Die LiveMap-Version konnte nicht überprüft werden. Bitte wende dich an den vCAD-Support.")
             if data ~= nil and data.message ~= nil then
                 print(data.message)
             end
@@ -216,21 +216,21 @@ function PerformVersionCheck()
         local changelog = data.changelog
         if version == current then
             startup = true
-            print("Gestartet. Version aktuell")
+            print("[VCAD-LIVEMAP] Gestartet. Version aktuell")
         else
             if version >= minimum then
                 startup = true
-                print("Eine neue Version ist verfügbar. Bitte aktualisiere das Script. Link zur aktuellen Version:")
+                print("[VCAD-LIVEMAP] Eine neue Version ist verfügbar. Bitte aktualisiere das Script. Link zur aktuellen Version:")
                 print(updatelink)
             else
-                print("Eine neue Version ist verfügbar. Diese Version ist nicht mehr kompatibel. Das Script wird sich deaktivieren. Um die LiveMap weiter zu nutzen, aktualisiere das Script.")
-                print("Link zur aktuellen Version: "..updatelink)
+                print("[VCAD-LIVEMAP] Eine neue Version ist verfügbar. Diese Version ist nicht mehr kompatibel. Das Script wird sich deaktivieren. Um die LiveMap weiter zu nutzen, aktualisiere das Script.")
+                print("[VCAD-LIVEMAP] Link zur aktuellen Version: "..updatelink)
                 failed = true
             end
             if #changelog > 0 then
-                print("Changelog:")
+                print("[VCAD-LIVEMAP] Changelog:")
                 for key,value in pairs(changelog) do
-                    print("Version "..value["version"].. ": ".. value["text"])
+                    print("[VCAD-LIVEMAP] Version "..value["version"].. ": ".. value["text"])
                 end
                 
             end
