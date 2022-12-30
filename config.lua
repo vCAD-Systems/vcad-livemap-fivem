@@ -12,6 +12,7 @@ Config.UpdateRate = 1
  - "copnet" - Only CopNet
  - "medicnet" - Only MedicNet
  - "carnet" - Only CarNet
+ - "fdnet" - Only FireNet
  - "*" - All systems
 ]]
 Config.System = "copnet"
