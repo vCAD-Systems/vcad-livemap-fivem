@@ -64,7 +64,7 @@ jobs:
             - Nutze die QB-Core Version, wenn du QBCore auf deinem Server verwendest.
             - Sollte dein FiveM-Server auf keins der beiden zutreffen, nutze die standalone (fivem) version
           draft: false
-          prerelease: true
+          prerelease: false
           
       - uses: montudor/action-zip@v1
         with:
