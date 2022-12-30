@@ -28,7 +28,8 @@ systems:
 Config.Jobs = {
     ['police'] =    {['color'] = 2, ['system'] = "copnet"},
     ['ambulance'] = {['color'] = 4, ['system'] = "medicnet"},
-    ['mechanic'] =  {['color'] = 5, ['system'] = "carnet"}
+    ['mechanic'] =  {['color'] = 5, ['system'] = "carnet"},
+    ['firefighter'] =  {['color'] = 4, ['system'] = "fdnet"}
 }
 
 -- If item is needed in Inventory
