@@ -7,8 +7,7 @@ local playerinvehicle = {}
 local panicplayers = {}
 local playeruntrackable = {}
 
-ESX = nil
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+ESX = exports["es_extended"]:getSharedObject()
 
 
 -- Sends data to VCAD server
