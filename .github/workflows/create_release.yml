@@ -35,11 +35,16 @@ jobs:
         with:
           ref: qbcore
           path: vCad-livemap-qb
+      - uses: actions/checkout@v3
+        with:
+          ref: esx_legacy_sharedObject_deprecation
+          path: vCad-livemap-esx-sharedobj-fix
       
       # Delete .git folders from releases
       - run: rm -rf vCad-livemap-esx/.git
       - run: rm -rf vCad-livemap-fivem/.git
       - run: rm -rf vCad-livemap-qb/.git
+      - run: rm -rf vCad-livemap-esx-sharedobj-fix/.git
 
     # Delete release before creating it new
       - uses: dev-drprasad/delete-tag-and-release@v0.2.0
@@ -75,6 +80,9 @@ jobs:
       - uses: montudor/action-zip@v1
         with:
           args: zip -qq -r vCad-livemap-qbcore.zip vCad-livemap-qb
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r vCad-livemap-esx-sharedobj-fix.zip vCad-livemap-esx-sharedobj-fix
           
       - name: Upload Release Asset
         id: upload-release-asset 
@@ -107,6 +115,17 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./vCad-livemap-qbcore.zip
           asset_name: vCad-livemap-qbcore.zip
+          asset_content_type: application/zip
+
+      - name: Upload Release Asset
+        id: upload-release-asset-qb
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./vCad-livemap-esx-sharedobj-fix.zip
+          asset_name: vCad-livemap-esx-sharedobj-fix.zip
           asset_content_type: application/zip
           
       - name: discord

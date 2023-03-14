@@ -19,11 +19,16 @@ jobs:
         with:
           ref: qbcore
           path: vCad-livemap-qb
+      - uses: actions/checkout@v3
+        with:
+          ref: esx_legacy_sharedObject_deprecation
+          path: vCad-livemap-esx-sharedobj-fix
       
       # Delete .git folders from releases
       - run: rm -rf vCad-livemap-esx/.git
       - run: rm -rf vCad-livemap-fivem/.git
       - run: rm -rf vCad-livemap-qb/.git
+      - run: rm -rf vCad-livemap-esx-sharedobj-fix/.git
       
       - uses: montudor/action-zip@v1
         with:
@@ -34,6 +39,9 @@ jobs:
       - uses: montudor/action-zip@v1
         with:
           args: zip -qq -r vCad-livemap-qbcore.zip vCad-livemap-qb
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r vCad-livemap-esx-sharedobj-fix.zip vCad-livemap-esx-sharedobj-fix
       
       - uses: actions/upload-artifact@v3
         with:
