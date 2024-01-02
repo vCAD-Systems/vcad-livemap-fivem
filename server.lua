@@ -23,15 +23,16 @@ function SendNewData()
         return
     end
 	
-	for k, v in pairs(ESX.GetPlayers()) do
-		if Showuser(v) then
-            local xPlayer = ESX.GetPlayerFromId(v)
+    local xPlayers = ESX.GetExtendedPlayers()
+	for k, v in pairs(xPlayers) do
+		if Showuser(xPlayer.source) then
+            local xPlayer = ESX.GetPlayerFromId(xPlayer.source)
 			noplayers = false
 
-			local coords = xPlayer.coords2
+			local coords = xPlayer.coords
             deb(type(coords))
 
-			local name = GetDisplayName(v, xPlayer.name)
+			local name = GetDisplayName(xPlayer.source, xPlayer.name)
 			deb(name)
 
 			local d = {}
@@ -44,7 +45,7 @@ function SendNewData()
                 d["location"] = xPlayer.getCoords()
             end
 
-            d["style"] = GetStyle(v, xPlayer.job)
+            d["style"] = GetStyle(xPlayer.source, xPlayer.job)
 			table.insert(data, d)
 		end
 	end
@@ -85,12 +86,14 @@ end
 function GetNumPlayers()
     local i = 0
 
-    for _, k in ipairs(ESX.GetPlayers()) do
-        if Showuser(k) then
+    local xPlayers = ESX.GetExtendedPlayers()
+
+    for _, xPlayer in pairs(xPlayers) do
+        if Showuser(xPlayer.source) then
             i = i + 1
         end
     end
-    
+
     return i
 end
 
