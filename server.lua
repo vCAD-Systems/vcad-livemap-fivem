@@ -24,12 +24,11 @@ function SendNewData()
     end
 	
     local xPlayers = ESX.GetExtendedPlayers()
-	for k, v in pairs(xPlayers) do
+	for k, xPlayer in pairs(xPlayers) do
 		if Showuser(xPlayer.source) then
-            local xPlayer = ESX.GetPlayerFromId(xPlayer.source)
 			noplayers = false
 
-			local coords = xPlayer.coords
+			local coords = xPlayer.getCoords()
             deb(type(coords))
 
 			local name = GetDisplayName(xPlayer.source, xPlayer.name)
@@ -39,11 +38,7 @@ function SendNewData()
 			d["name"] = name
             d["system"] = Config.Jobs[xPlayer.job.name]["system"]
 			
-            if type(coords) == "table" then
-                d["location"] = coords
-            else
-                d["location"] = xPlayer.getCoords()
-            end
+            d["location"] = coords
 
             d["style"] = GetStyle(xPlayer.source, xPlayer.job)
 			table.insert(data, d)
