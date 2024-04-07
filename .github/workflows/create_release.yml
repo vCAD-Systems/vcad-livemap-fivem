@@ -47,12 +47,11 @@ jobs:
       - run: rm -rf vCad-livemap-esx-sharedobj-fix/.git
 
     # Delete release before creating it new
-      - uses: dev-drprasad/delete-tag-and-release@v0.2.0
+      - uses: dev-drprasad/delete-tag-and-release@v1.1
         with:
           delete_release: true
           tag_name: latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
             
       - name: Create Release
         id: create_release
