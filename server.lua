@@ -25,7 +25,7 @@ function SendNewData()
 	
     local xPlayers = ESX.GetExtendedPlayers()
 	for k, xPlayer in pairs(xPlayers) do
-		if Showuser(xPlayer.source) then
+		if xPlayer and Showuser(xPlayer.source) then
 			noplayers = false
 
 			local coords = xPlayer.getCoords()
